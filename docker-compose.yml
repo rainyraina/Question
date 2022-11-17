@@ -17,6 +17,11 @@ services:
     build: ./webapp
     ports:
       - "80:80"
+  sonarqube:
+    container_name: sonarqube
+    build: ./sonarqube
+    ports:
+      - "9000:9000"
 
 volumes:
   jenkins_data:
