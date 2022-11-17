@@ -32,9 +32,17 @@ pipeline {
 					steps {
 						sh 'mvn -B -DskipTests clean package'
 						sh 'mvn test'
-						sh '/var/jenkins_home/apache-maven-3.6.3/bin/mvn --batch-mode -V -U -e clean verify -Dsurefire.useFile=false -Dmaven.test.failure.ignore'
-						sh '/var/jenkins_home/apache-maven-3.6.3/bin/mvn --batch-mode -V -U -e checkstyle:checkstyle pmd:pmd pmd:cpd findbugs:findbugs'
 					}
+				stage ('Build') {
+					steps {
+						sh '/var/jenkins_home/apache-maven-3.6.3/bin/mvn --batch-mode -V -U -e clean verify -Dsurefire.useFile=false -Dmaven.test.failure.ignore'
+					}
+				}
+				stage ('Analysis') {
+					steps {
+					sh '/var/jenkins_home/apache-maven-3.6.3/bin/mvn --batch-mode -V -U -e checkstyle:checkstyle pmd:pmd pmd:cpd findbugs:findbugs'
+					}
+				}
 					
 					post {
 						always {
