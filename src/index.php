@@ -8,7 +8,7 @@
       function validateForm() {
           let x = document.forms["myForm"]["searchItem"];
           if (x.value == "") {
-              alert("Invalid Inout");
+              alert("Invalid Input");
               return false;
           }
           else {
