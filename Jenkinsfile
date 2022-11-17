@@ -56,7 +56,7 @@ pipeline {
 			sh '/var/jenkins_home/apache-maven-3.6.3/bin/mvn --batch-mode -V -U -e checkstyle:checkstyle pmd:pmd pmd:cpd findbugs:findbugs'
 			}
 		}
-		}
+		
 		post {
 			always {
 			junit testResults: '**/target/surefire-reports/TEST-*.xml'
@@ -67,6 +67,6 @@ pipeline {
 			recordIssues enabledForFailure: true, tool: pmdParser(pattern: '**/target/pmd.xml')
 			}
 		}
+		}
 
 	}
-}
