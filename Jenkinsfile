@@ -1,6 +1,17 @@
 pipeline {
 	agent none
 	stages {
+		stage('Checkout SCM') {
+				steps {
+					git 'https://github.com/rainyraina/JenkinsDependencyCheck'
+				}
+			}
+
+			stage('OWASP DependencyCheck') {
+				steps {
+					dependencyCheck additionalArguments: '--format HTML --format XML suppression suppression.xml', odcInstallation: 'dependency-check 7.3.0'
+				}
+			}
 		stage('Integration UI Test') {
 			parallel {
 				stage('Deploy') {
@@ -37,6 +48,7 @@ pipeline {
 						}
 					}
 				}
+				
 			}
 		}
 	}
