@@ -12,16 +12,16 @@ pipeline {
 					dependencyCheck additionalArguments: '--format HTML --format XML suppression suppression.xml', odcInstallation: 'dependency-check 7.3.0'
 				}
 			}
-		stage ('Build') {
-			steps {
-				sh '/var/jenkins_home/apache-maven-3.6.3/bin/mvn --batch-mode -V -U -e clean verify -Dsurefire.useFile=false -Dmaven.test.failure.ignore'
-					}
-			}
-		stage ('Analysis') {
-			steps {
-				sh '/var/jenkins_home/apache-maven-3.6.3/bin/mvn --batch-mode -V -U -e checkstyle:checkstyle pmd:pmd pmd:cpd findbugs:findbugs'
-					}
-			}
+// 		stage ('Build') {
+// 			steps {
+// 				sh '/var/jenkins_home/apache-maven-3.6.3/bin/mvn --batch-mode -V -U -e clean verify -Dsurefire.useFile=false -Dmaven.test.failure.ignore'
+// 					}
+// 			}
+// 		stage ('Analysis') {
+// 			steps {
+// 				sh '/var/jenkins_home/apache-maven-3.6.3/bin/mvn --batch-mode -V -U -e checkstyle:checkstyle pmd:pmd pmd:cpd findbugs:findbugs'
+// 					}
+// 			}
 		stage('Integration UI Test') {
 			parallel {
 				stage('Deploy') {
