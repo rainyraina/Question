@@ -12,6 +12,7 @@ services:
       - jenkins-docker-certs:/certs/client:ro
       - /var/run/docker.sock:/var/run/docker.sock
       - ./jenkins_home:/var/jenkins_home
+      - ~/.gitconfig/etc/gitconfig
     depends_on:
       - docker
     networks:
