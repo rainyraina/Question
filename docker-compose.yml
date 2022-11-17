@@ -9,20 +9,56 @@ services:
       - '443:8443'
       - '50000:50000'
     volumes:
+      - jenkins-docker-certs:/certs/client:ro
       - /var/run/docker.sock:/var/run/docker.sock
       - ./jenkins_home:/var/jenkins_home
+    depends_on:
+      - docker
+    networks:
+      jenkins:
+        aliases:
+          - jenkins
+    environment:
+      DOCKER_HOST: "tcp://docker:2376"
+      DOCKER_CERT_PATH: "/certs/client"
+      DOCKER_TLS_VERIFY: 1
   
-  webapp:
-    container_name: webapp
-    build: ./webapp
+  docker:
+    container_name: dind
+    image: docker:dind
+    privileged: true
+    environment:
+      DOCKER_TLS_CERTDIR: /certs
+      VIRTUAL_PORT: 2376
     ports:
+      - "2376:2376"
       - "80:80"
+      - "3000:3000"
+      - "5000:5000"
+    volumes:
+      - jenkins-docker-certs:/certs/client
+      - jenkins-data:/var/jenkins_home
+    networks:
+      jenkins:
+        aliases:
+          - docker
+    restart: always
+  
   sonarqube:
+    build:
+      context: ./sonarqube
+      dockerfile: Dockerfile
     container_name: sonarqube
-    build: ./sonarqube
+    environment:
+      - "SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true"
     ports:
       - "9000:9000"
 
 volumes:
-  jenkins_data:
-    driver: local
+  jenkins-docker-certs:
+  jenkins-data:
+
+networks:
+  jenkins:
+    name: jenkins
+    driver: bridge
